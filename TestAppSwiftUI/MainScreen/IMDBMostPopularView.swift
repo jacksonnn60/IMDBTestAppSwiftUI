@@ -16,8 +16,12 @@ struct IMDBMostPopularView: View {
     // MARK: - Body
     
     var body: some View {
-        List(viewModel.items) {
-            IMDBItemView(item: $0)
+        List(viewModel.items) { item in
+            let query = item.title.split(separator: " ").joined(separator: "+")
+            
+            Link(destination: URL(string: "https://www.google.com/search?q=\(query)")!) {
+                IMDBItemView(item: item)
+            }
         }
         .onAppear {
             Task { try? await viewModel.fetchIMDBMostPopular() }
